@@ -1,6 +1,6 @@
 using System;
 
-namespace hvmatl
+namespace Hvmatl.Web
 {
     public class WeatherForecast
     {
