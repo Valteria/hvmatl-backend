@@ -26,6 +26,8 @@ namespace Hvmatl.Web
             services.ConfigureSPA();
             services.ConfigureIdentity();
             services.ConfigureDatabase(Configuration.GetConnectionString("DBConnectionString"));
+            services.ConfigureJWT(Configuration.GetSection("JwtSettings"));
+            services.ConfigureAuthorization();
 
 
             // In production, the React files will be served from this directory
