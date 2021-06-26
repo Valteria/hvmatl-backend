@@ -28,10 +28,11 @@ namespace Hvmatl.Web
             services.ConfigureDatabase(Configuration.GetConnectionString("DBConnectionString"));
             services.ConfigureJWT(Configuration.GetSection("JwtSettings"));
             services.ConfigureAuthorization();
+            services.ConfigureCors();
 
 
             // In production, the React files will be served from this directory
-            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,7 +64,7 @@ namespace Hvmatl.Web
 
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "ClientApp";
+                spa.Options.SourcePath = "WebApp";
 
                 if (env.IsDevelopment())
                 {

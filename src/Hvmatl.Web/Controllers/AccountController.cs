@@ -1,5 +1,6 @@
 ﻿using Hvmatl.Core.Entities;
 using Hvmatl.Core.Helper;
+using Hvmatl.Infrastructure.Data;
 using Hvmatl.Web.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,11 +20,13 @@ namespace Hvmatl.Web.Controllers
     {
         private readonly JwtSettings _jwtSettings;
         private readonly UserManager<User> _userManager;
+        private readonly ApplicationDbContext _dbContext;
 
-        public AccountController(IOptions<JwtSettings> jwtSettings, UserManager<User> userManager)
+        public AccountController(IOptions<JwtSettings> jwtSettings, UserManager<User> userManager, ApplicationDbContext dbContext)
         {
             _jwtSettings = jwtSettings.Value;
             _userManager = userManager;
+            _dbContext = dbContext;
         }
 
         [HttpPost("[action]")]
@@ -70,6 +73,26 @@ namespace Hvmatl.Web.Controllers
 
             // Return Bad Request Status With ErrorList
             return BadRequest(new { message = errorList });
+        }
+
+        /*
+         * Type : GET
+         * URL : /api/account/getuserlist
+         * Description: Return all User
+         * Response Status: 200 Ok
+         */
+        [HttpGet("[action]")]
+        public IActionResult GetUserList()
+        {
+            // Query All User Into A List
+            var users = _dbContext.Users
+                .ToList();
+
+            return Ok(new
+            {
+                result = users,
+                message = "Recieved User List"
+            });
         }
     }
 }

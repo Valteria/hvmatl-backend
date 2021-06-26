@@ -21,7 +21,7 @@ namespace Hvmatl.Web.Extensions
         {
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "ClientApp/build";
+                configuration.RootPath = "WebApp/build";
             });
         }
 
@@ -89,6 +89,17 @@ namespace Hvmatl.Web.Extensions
             {
                 options.AddPolicy("RequireLoggedIn", policy => policy.RequireRole("Admin", "User").RequireAuthenticatedUser());
                 options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("Admin").RequireAuthenticatedUser());
+            });
+        }
+
+        public static void ConfigureCors(this IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder =>
+                    builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
             });
         }
     }
