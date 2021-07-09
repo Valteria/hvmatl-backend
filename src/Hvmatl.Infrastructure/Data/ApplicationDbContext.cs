@@ -21,10 +21,22 @@ namespace Hvmatl.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Member>().HasIndex(m => m.EmailAddress).IsUnique();
+            modelBuilder.Entity<Department>().HasIndex(d => d.Name).IsUnique();
+
+            // One To Many Relationship (Department -> Member)
+            modelBuilder.Entity<Department>()
+                        .HasMany(d => d.Members)
+                        .WithOne(d => d.Department)
+                        .HasForeignKey(d => d.DepartmentID);
+
             modelBuilder.Entity<IdentityRole<int>>().HasData(
                 new IdentityRole<int> { Id = 1, Name = "Admin", NormalizedName = "ADMIN" },
                 new IdentityRole<int> { Id = 2, Name = "User", NormalizedName = "USER" }
             );
-        }      
+        }
+        
+        public DbSet<Member> Member { get; set; }
+        public DbSet<Department> Department { get; set; }
     }
 }

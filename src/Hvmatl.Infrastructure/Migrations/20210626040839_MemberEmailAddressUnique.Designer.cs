@@ -3,15 +3,17 @@ using System;
 using Hvmatl.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Hvmatl.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210626040839_MemberEmailAddressUnique")]
+    partial class MemberEmailAddressUnique
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,10 +23,8 @@ namespace Hvmatl.Web.Migrations
 
             modelBuilder.Entity("Hvmatl.Core.Entities.Department", b =>
                 {
-                    b.Property<int>("DepartmentID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                    b.Property<string>("DepartmentID")
+                        .HasColumnType("text");
 
                     b.Property<string>("Acronym")
                         .HasColumnType("text");
@@ -34,9 +34,6 @@ namespace Hvmatl.Web.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("DepartmentID");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("Department");
                 });
@@ -48,8 +45,8 @@ namespace Hvmatl.Web.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int?>("DepartmentID")
-                        .HasColumnType("integer");
+                    b.Property<string>("DepartmentID")
+                        .HasColumnType("text");
 
                     b.Property<string>("EmailAddress")
                         .IsRequired()
@@ -178,14 +175,14 @@ namespace Hvmatl.Web.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "30b41df4-ed22-477d-a46b-a6e13236547a",
+                            ConcurrencyStamp = "11a6c277-15f3-4df4-bc61-3eaaaf69942c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "1472cac7-5d0c-4511-b436-940e452691a4",
+                            ConcurrencyStamp = "c8728999-0ae4-4710-b5ee-01f730cb5a35",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -295,7 +292,7 @@ namespace Hvmatl.Web.Migrations
             modelBuilder.Entity("Hvmatl.Core.Entities.Member", b =>
                 {
                     b.HasOne("Hvmatl.Core.Entities.Department", "Department")
-                        .WithMany("Members")
+                        .WithMany()
                         .HasForeignKey("DepartmentID");
 
                     b.Navigation("Department");
@@ -350,11 +347,6 @@ namespace Hvmatl.Web.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Hvmatl.Core.Entities.Department", b =>
-                {
-                    b.Navigation("Members");
                 });
 #pragma warning restore 612, 618
         }

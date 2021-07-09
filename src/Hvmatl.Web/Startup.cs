@@ -22,7 +22,9 @@ namespace Hvmatl.Web
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+                .AddXmlDataContractSerializerFormatters(); ;
             services.ConfigureSPA();
             services.ConfigureIdentity();
             services.ConfigureDatabase(Configuration.GetConnectionString("DBConnectionString"));
