@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -101,6 +102,11 @@ namespace Hvmatl.Web.Extensions
                     .AllowAnyMethod()
                     .AllowAnyHeader());
             });
+        }
+
+        public static void ConfigureLogger(this IServiceCollection services)
+        {
+            services.AddSingleton(Log.Logger);
         }
     }
 }

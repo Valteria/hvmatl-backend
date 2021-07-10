@@ -32,6 +32,7 @@ namespace Hvmatl.Web
             services.ConfigureJWT(Configuration.GetSection("JwtSettings"));
             services.ConfigureAuthorization();
             services.ConfigureCors();
+            services.ConfigureLogger();
 
 
             // In production, the React files will be served from this directory
@@ -39,7 +40,7 @@ namespace Hvmatl.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger logger)
         {
             if (env.IsDevelopment())
             {
@@ -53,6 +54,7 @@ namespace Hvmatl.Web
             }
 
             app.UseSerilogRequestLogging();
+            app.ConfigureExceptionHandler(logger);
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
