@@ -1,10 +1,15 @@
-﻿using Hvmatl.Core.Entities;
+﻿using AutoMapper;
+using Hvmatl.Core.Entities;
 using Hvmatl.Core.Helper;
+using Hvmatl.Core.Interfaces;
+using Hvmatl.Core.Models;
 using Hvmatl.Infrastructure.Data;
+using Hvmatl.Web.DateTransferObjects;
 using Hvmatl.Web.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +26,18 @@ namespace Hvmatl.Web.Controllers
         private readonly JwtSettings _jwtSettings;
         private readonly UserManager<User> _userManager;
         private readonly ApplicationDbContext _dbContext;
+        private readonly IMailNetService _mailNetService;
+        private readonly ILogger _logger;
+        private readonly IMapper _mapper;
 
-        public AccountController(IOptions<JwtSettings> jwtSettings, UserManager<User> userManager, ApplicationDbContext dbContext)
+        public AccountController(IOptions<JwtSettings> jwtSettings, UserManager<User> userManager, ApplicationDbContext dbContext, IMailNetService mailNetService, ILogger logger, IMapper mapper)
         {
             _jwtSettings = jwtSettings.Value;
             _userManager = userManager;
             _dbContext = dbContext;
+            _mailNetService = mailNetService;
+            _logger = logger;
+            _mapper = mapper;
         }
 
         [HttpPost("[action]")]
@@ -42,7 +53,9 @@ namespace Hvmatl.Web.Controllers
                 Email = formdata.EmailAddress,
                 UserName = formdata.Username,
                 DateCreated = DateTimeOffset.UtcNow,
-                SecurityStamp = Guid.NewGuid().ToString()
+                SecurityStamp = Guid.NewGuid().ToString(),
+                AccountApproved = false,
+                AccountEnabled = false
             };
 
             // Add User To Database
@@ -54,11 +67,26 @@ namespace Hvmatl.Web.Controllers
                 // Add Role To User
                 await _userManager.AddToRoleAsync(user, "User");
 
+                var userDto = _mapper.Map<UserDto>(user);
+                _logger.Information("Account Created: " + userDto.ToString());
+
+                MailRequest mailRequest = new MailRequest
+                {
+                    RecipientEmail = user.Email,
+                    RecipientName = user.UserName,
+                    Subject = "Registration Successful",
+                    Body = "Your account has been successfully registered. Before you can access " +
+                    "this account you account needs to be approved. Please wait up to 24 hours or call this number xxx-xxxx-xxxx",
+
+                };
+
+                await _mailNetService.SendEmail(mailRequest);
+
                 // Return Ok Request
                 return Ok(new
                 {
-                    result = user,
-                    message = "Registration Successful"
+                    result = userDto,
+                    message = "Registration Successful, Approval Pending"
                 });
             }
             else
@@ -75,12 +103,7 @@ namespace Hvmatl.Web.Controllers
             return BadRequest(new { message = errorList });
         }
 
-        /*
-         * Type : GET
-         * URL : /api/account/getuserlist
-         * Description: Return all User
-         * Response Status: 200 Ok
-         */
+
         [HttpGet("[action]")]
         public IActionResult GetUserList()
         {
@@ -94,5 +117,6 @@ namespace Hvmatl.Web.Controllers
                 message = "Recieved User List"
             });
         }
+
     }
 }

@@ -33,7 +33,8 @@ namespace Hvmatl.Web
             services.ConfigureAuthorization();
             services.ConfigureCors();
             services.ConfigureLogger();
-
+            services.ConfigureMailService(Configuration.GetSection("EmailSettings"));
+            services.ConfigureAutoMapper();
 
             // In production, the React files will be served from this directory
 

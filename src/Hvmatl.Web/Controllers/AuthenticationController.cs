@@ -48,9 +48,11 @@ namespace Hvmatl.Web.Controllers
             // Generate Expiration Time For Token
             double tokenExpiryTime = Convert.ToDouble(_jwtSettings.ExpireTime);
 
-            // Check Login Status
             if (user != null && await _userManager.CheckPasswordAsync(user, formdata.Password))
             {
+                if (user.AccountApproved == false) return Unauthorized(new { message = "Your account is pending approval"});
+                if (user.AccountEnabled == false) return Unauthorized(new { message = "Your account has been disabled" });
+
                 // Create JWT Token Handler
                 var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -97,5 +99,6 @@ namespace Hvmatl.Web.Controllers
                 });
             }
         }
+    
     }
 }

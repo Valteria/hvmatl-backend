@@ -1,6 +1,10 @@
-﻿using Hvmatl.Core.Entities;
+﻿using AutoMapper;
+using Hvmatl.Core.Entities;
 using Hvmatl.Core.Helper;
+using Hvmatl.Core.Interfaces;
+using Hvmatl.Core.Services;
 using Hvmatl.Infrastructure.Data;
+using Hvmatl.Web.Profiles;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +15,7 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -107,6 +112,20 @@ namespace Hvmatl.Web.Extensions
         public static void ConfigureLogger(this IServiceCollection services)
         {
             services.AddSingleton(Log.Logger);
+        }
+
+        public static void ConfigureMailService(this IServiceCollection services, IConfiguration emailConfiguration)
+        {
+            services.Configure<EmailSettings>(emailConfiguration);
+            services.AddTransient<IMailNetService, MailNetService>();
+        }
+
+        public static void ConfigureAutoMapper(this IServiceCollection services)
+        {
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()
+                .Where(x => x.FullName?
+                    .Contains("Hvmatl.Web") ?? false)
+                );
         }
     }
 }

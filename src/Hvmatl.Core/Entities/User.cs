@@ -12,5 +12,9 @@ namespace Hvmatl.Core.Entities
     {
         [Required(ErrorMessage = "User Date Created is a required field.")]
         public DateTimeOffset DateCreated { get; set; }
+        [Required(ErrorMessage = "User Account Enabled is a required field.")]
+        public bool AccountEnabled { get; set; }
+        [Required(ErrorMessage = "User Account Approved is a required field.")]
+        public bool AccountApproved { get; set; }
     }
 }

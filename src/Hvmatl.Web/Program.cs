@@ -14,11 +14,10 @@ namespace Hvmatl.Web
 {
     public class Program
     {
-        public static IConfiguration Configuration { get; private set; }
         public static void Main(string[] args)
         {
-            // Build Configuration
-            Configuration = new ConfigurationBuilder()
+            //Read Configuration from appSettings
+            var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true,
@@ -27,9 +26,9 @@ namespace Hvmatl.Web
                 .AddEnvironmentVariables()
                 .Build();
 
-            // Configure serilog
+            //Initialize Logger
             Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(Configuration)
+                .ReadFrom.Configuration(config)
                 .CreateLogger();
 
             try
@@ -50,11 +49,10 @@ namespace Hvmatl.Web
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>()
-                    .UseConfiguration(Configuration)
-                    .UseSerilog();
+                    webBuilder.UseStartup<Startup>();
                 });
     }
 }
