@@ -237,3 +237,44 @@ appsettings.Development.json
 
 # Log File
 src/Hvmatl.Web/Logs
+
+# React
+.DS_STORE
+src/Hvmatl.Web/WebApp/node_modules
+src/Hvmatl.Web/WebApp/scripts/flow/*/.flowconfig
+.flowconfig
+*~
+*.pyc
+.grunt
+_SpecRunner.html
+__benchmarks__
+src/Hvmatl.Web/WebApp/build/
+src/Hvmatl.Web/WebApp/build2/
+src/Hvmatl.Web/WebApp/remote-repo/
+src/Hvmatl.Web/WebApp/coverage/
+src/Hvmatl.Web/WebApp/.module-cache
+src/Hvmatl.Web/WebApp/fixtures/dom/public/react-dom.js
+src/Hvmatl.Web/WebApp/fixtures/dom/public/react.js
+src/Hvmatl.Web/WebApp/test/the-files-to-test.generated.js
+*.log*
+src/Hvmatl.Web/WegbApp/chrome-user-data
+*.sublime-project
+*.sublime-workspace
+.idea
+*.iml
+.vscode
+*.swp
+*.swo
+
+packages/react-devtools-core/dist
+packages/react-devtools-extensions/chrome/build
+packages/react-devtools-extensions/chrome/*.crx
+packages/react-devtools-extensions/chrome/*.pem
+packages/react-devtools-extensions/firefox/build
+packages/react-devtools-extensions/firefox/*.xpi
+packages/react-devtools-extensions/firefox/*.pem
+packages/react-devtools-extensions/shared/build
+packages/react-devtools-extensions/.tempUserDataDir
+packages/react-devtools-inline/dist
+packages/react-devtools-shell/dist
+packages/react-devtools-scheduling-profiler/dist
