@@ -1,0 +1,210 @@
+
+.writeArticle{
+    margin: 20px 0;
+    height: 100%;
+    flex: 1;
+}
+
+
+.article__controler{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+} 
+
+.article__review{
+    display: flex;
+    margin-bottom: 20px;
+    align-items: center;
+    flex: 0.2;
+}
+.article__description{
+    flex-grow: 1;
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
+}
+.article__description label{
+    font-size: 20px;
+    font-weight: bold;
+}
+.article__description input{
+    display: block;
+    width: 100%;
+    padding: 5px 10px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+}
+
+.article__description-title{
+    font-size: 20px;
+}
+
+.article__description-date{
+    font-size: 13px;
+    font-style: italic;
+    color: gray;
+}
+
+.article__getURLImage{
+    padding: 5px 10px;
+    width: 100%;
+    height: 100px;
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    background-color: rgb(248, 248, 248);
+}
+
+.article__resourceImage{
+    display: flex;
+}
+.article__resourceImage button{
+    margin-left: 5px;
+    flex: 0.2;
+    display: inline;
+    font-weight: bold;
+}
+.article__resourceImage input{
+    background-color: white;
+    flex: 0.8;
+}
+
+.article__img{
+    width: 250px;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.article__img img{
+    height: 185px;
+    border-radius: 8px;
+}
+
+.article__img:hover .article__img-upload{
+    visibility: visible;
+}
+
+.article__img-upload{
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    background-color: rgba(128, 128, 128, 0.432);
+    border-radius: 5px;
+    visibility: hidden;
+}
+
+.article__img-upload-btn{
+    background-color: gray;
+    border: none;
+}
+
+.article__img-inputURL{
+    padding: 5px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background-color: lightgray;
+    visibility: hidden;
+}
+
+.visible{
+    visibility: visible;
+}
+
+.article__img-inputURL input{
+    width: 100%;
+    font-size: 15px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    padding: 0 10px;
+}
+
+.article__img-groupBtn{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 5px;
+    width: 100%;
+}
+
+.article__img-groupBtn button{
+    /* width: 30px; */
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+/* Article-Editor */
+.article__editor{
+    flex: 1;
+}
+.demo-wrapper.rdw-editor-wrapper{
+    height: 85%;
+}
+
+/* overwrite draft-js */
+.demo-editor.rdw-editor-main{
+    height: 100%;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.public-DraftStyleDefault-block.public-DraftStyleDefault-ltr{
+    margin: 0;
+}
+.public-DraftStyleDefault-ltr > span{
+    color: black;
+}
+.DraftEditor-editorContainer, 
+.DraftEditor-root, 
+.public-DraftEditor-content{
+    height: auto;
+}
+.rdw-embedded-modal,
+.rdw-link-modal{
+    height: auto;
+}
+
+/* Group Button */
+.group__button{
+    padding: 10px;
+    display: flex;
+    justify-content: space-evenly;
+}
+.group__button button{
+    /* width: 90px; */
+    border: none;
+    height: 40px;
+    border-radius: 5px;
+
+    font-size: large;
+    outline: none;
+}
+/* .group__button .button-preview{
+    background-color: rgb(2, 122, 2);
+    color: whitesmoke;
+}
+.group__button .button-back{
+    color: black;
+    background-color: rgb(224, 224, 224);
+} */

@@ -1,0 +1,8 @@
+.reviewArticle__container{
+    height: auto;
+}
+
+.reviewArticle__buttonGroup{
+    display: flex;
+    justify-content: space-around;
+}
