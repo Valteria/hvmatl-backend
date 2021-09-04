@@ -104,6 +104,101 @@ namespace Hvmatl.Web.Controllers
         }
 
 
+        [HttpPut("[action]")]
+        public IActionResult Approve([FromForm] AccountEnableVM formdata)
+        {
+
+            // Find User
+            var user = _dbContext.Users
+                .SingleOrDefault(u => u.Id == formdata.AccountID);
+
+            if (user == null) return NotFound(new { message = "User Not Found" });
+
+
+            user.AccountApproved = true;
+
+            var userDto = _mapper.Map<UserDto>(user);
+            _logger.Information("Updated Account: " + userDto.ToString());
+
+            MailRequest mailRequest = new MailRequest
+            {
+                RecipientEmail = user.Email,
+                RecipientName = user.UserName,
+                Subject = "Account Approved",
+                Body = "Your account has approved",
+            };
+
+            _mailNetService.SendEmail(mailRequest);
+
+
+            // Return Bad Request Status With ErrorList
+            return Ok(new
+            {
+                result = userDto,
+                message = "Account Approved"
+            });
+        }
+
+        [HttpPut("[action]")]
+        public IActionResult Enable([FromForm] AccountEnableVM formdata)
+        {
+
+            // Find User
+            var user = _dbContext.Users
+                .SingleOrDefault(u => u.Id == formdata.AccountID);
+
+            if (user == null) return NotFound(new { message = "User Not Found" });
+
+
+            user.AccountEnabled = true;
+
+            var userDto = _mapper.Map<UserDto>(user);
+            _logger.Information("Updated Account: " + userDto.ToString());
+
+            MailRequest mailRequest = new MailRequest
+            {
+                RecipientEmail = user.Email,
+                RecipientName = user.UserName,
+                Subject = "Account Approved",
+                Body = "Your account has enabled",
+            };
+
+            _mailNetService.SendEmail(mailRequest);
+
+
+            // Return Bad Request Status With ErrorList
+            return Ok(new
+            {
+                result = userDto,
+                message = "Account Enabled"
+            });
+        }
+
+        [HttpPut("[action]")]
+        public IActionResult Disable([FromForm] AccountEnableVM formdata)
+        {
+
+            // Find User
+            var user = _dbContext.Users
+                .SingleOrDefault(u => u.Id == formdata.AccountID);
+
+            if (user == null) return NotFound(new { message = "User Not Found" });
+
+
+            user.AccountEnabled = false;
+
+            var userDto = _mapper.Map<UserDto>(user);
+            _logger.Information("Updated Account: " + userDto.ToString());
+
+
+            // Return Bad Request Status With ErrorList
+            return Ok(new
+            {
+                result = userDto,
+                message = "Account Disabled"
+            });
+        }
+
         [HttpGet("[action]")]
         public IActionResult GetUserList()
         {
