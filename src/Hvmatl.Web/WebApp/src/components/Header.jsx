@@ -24,6 +24,11 @@ const Header = (prop) => {
     const [show, setShow] = useState(false);
     const [content, setContent] = useState({});
 
+    const signOut = (event) => {
+        sessionStorage.removeItem('token');
+        window.location.reload(true);
+    };
+
     //Modify styling when the window size is changing
     const resizeCallback = useCallback(() => {
         if (window.innerWidth < 1450) {
@@ -162,6 +167,10 @@ const Header = (prop) => {
                                     <a href="/massSchedule" className="email-address"><i className="fas fa-calendar-alt" aria-hidden="true" ref={massSchedule}></i><span>{t("header.top.massSchedule")}</span></a>
                                     <a href="mailto:info@hvmatl.org" className="email-address"><i className="fas fa-envelope" aria-hidden="true" ref={email}></i> <span>info@hvmatl.org</span></a>
                                     <a href="tel:770-921-0077" className="phone"><i className="fas fa-phone" aria-hidden="true" ref={phone}></i> <span>770-921-0077</span></a>
+                                    { sessionStorage.getItem('token') != null ? 
+                                    <button onClick={signOut}><span>{sessionStorage.getItem('username')}</span> Sign Out</button> :  
+                                    <a href="/login" className="ml-2"><span>Login</span></a> 
+                                    }
                                 </div>
                             </div>
                         </div>

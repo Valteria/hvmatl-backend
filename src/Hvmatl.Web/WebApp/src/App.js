@@ -52,6 +52,10 @@ import Upload from './pages/Upload';
 import WriteArticle from './pages/WriteArticle';
 import ArticleRepo from './pages/ArticleRepo';
 import ReviewArticle from './pages/ReviewArticle';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import ControlPanel from './pages/ControlPanel';
+import Activate from './pages/Activate';
 
 
 //Google Analytics
@@ -99,21 +103,21 @@ function getCookie(cookieParam) {
 checkLangCookie()
 
 const App = (props) => {
-    useEffect(() => {
-        if (!props.token && !sessionStorage.getItem('token')) {
-            (async () => {
-                const auth = await props.auth({
-                    username: 'anonymous',
-                    password: 'anonymous'
-                });
-                sessionStorage.setItem('token', auth.token);
-            })();
-        } else if (sessionStorage.getItem('token')) {
-            props.restoreToken(sessionStorage.getItem('token'));
-        } else {
-            sessionStorage.setItem('token', props.token);
-        }
-    }, [props]);
+    // useEffect(() => {
+    //     if (!props.token && !sessionStorage.getItem('token')) {
+    //         (async () => {
+    //             const auth = await props.auth({
+    //                 username: 'anonymous',
+    //                 password: 'anonymous'
+    //             });
+    //             sessionStorage.setItem('token', auth.token);
+    //         })();
+    //     } else if (sessionStorage.getItem('token')) {
+    //         props.restoreToken(sessionStorage.getItem('token'));
+    //     } else {
+    //         sessionStorage.setItem('token', props.token);
+    //     }
+    // }, [props]);
     return (
         <Router>
             <Route path="/clergy-list" component={ClergyListPage} exact />
@@ -159,16 +163,20 @@ const App = (props) => {
             <Route path="/write-article/:id" component={WriteArticle} />
             <Route path="/article-repo" component={ArticleRepo} />
             <Route path="/article-review/:id" component={ReviewArticle} />
+            <Route path="/login" component={Login} />
+            <Route path="/register" component={Register} />
+            <Route path="/controlPanel" component={ControlPanel} />
+            <Route path="/activate" component={Activate} />
         </Router>
     )
 };
 
 const mapStateToProps = (state) => ({
-    token: state.auth.token
+    //token: state.auth.token
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    auth: (credentials) => authenticate(dispatch, credentials),
-    restoreToken: (token) => restoreToken(dispatch, token)
+    //auth: (credentials) => authenticate(dispatch, credentials),
+    //restoreToken: (token) => restoreToken(dispatch, token)
 })
 export default connect(mapStateToProps, mapDispatchToProps)(App);
