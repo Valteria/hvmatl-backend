@@ -1,5 +1,6 @@
 ﻿using Hvmatl.Core.Entities;
 using Hvmatl.Core.Helper;
+using Hvmatl.Web.Interface;
 using Hvmatl.Web.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -24,80 +25,98 @@ namespace Hvmatl.Web.Controllers
         private readonly JwtSettings _jwtSettings;
         private readonly SignInManager<User> _signManager;
         private readonly UserManager<User> _userManager;
+        private readonly IAuthenticationManager _authManager;
 
-        public AuthenticationController(IOptions<JwtSettings> jwtSettings, SignInManager<User> signManager, UserManager<User> userManager)
+        public AuthenticationController(IOptions<JwtSettings> jwtSettings, SignInManager<User> signManager, UserManager<User> userManager,  IAuthenticationManager authManager)
         {
             _jwtSettings = jwtSettings.Value;
             _signManager = signManager;
             _userManager = userManager;
+            _authManager = authManager;
         }
 
-        [HttpPost("[action]")]
-        public async Task<IActionResult> Login([FromForm] AuthenticationLoginVM formdata)
+        // [HttpPost("[action]")]
+        // public async Task<IActionResult> Login([FromForm] AuthenticationLoginVM formdata)
+        // {
+
+        //     // Get The User
+        //     var user = await _userManager.FindByNameAsync(formdata.Username);
+
+        //     // Get The User Role
+        //     //var roles = await _userManager.GetRolesAsync(user);
+
+        //     // Generate Key Token
+        //     var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtSettings.Secret));
+
+        //     // Generate Expiration Time For Token
+        //     double tokenExpiryTime = Convert.ToDouble(_jwtSettings.ExpireTime);
+
+        //     if (user != null && await _userManager.CheckPasswordAsync(user, formdata.Password))
+        //     {
+        //         if (user.AccountApproved == false) return Unauthorized(new { message = "Your account is pending approval"});
+        //         if (user.AccountEnabled == false) return Unauthorized(new { message = "Your account has been disabled" });
+
+        //         // Create JWT Token Handler
+        //         var tokenHandler = new JwtSecurityTokenHandler();
+
+        //         // Create Token Descriptor
+        //         var tokenDescriptor = new SecurityTokenDescriptor
+        //         {
+        //             Subject = new ClaimsIdentity(new Claim[]
+        //             {
+        //                 new Claim(JwtRegisteredClaimNames.Sub, formdata.Username),
+        //                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        //                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        //                 //new Claim(ClaimTypes.Role, roles.FirstOrDefault()),
+        //                 new Claim("LoggedOn", DateTime.Now.ToString())
+        //             }),
+
+        //             SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature),
+        //             Issuer = _jwtSettings.Issuer,
+        //             Audience = _jwtSettings.Audience,
+        //             Expires = DateTime.UtcNow.AddMinutes(tokenExpiryTime)
+        //         };
+
+        //         // Create Token
+        //         var token = tokenHandler.CreateToken(tokenDescriptor);
+
+        //         // Return OK Request
+        //         return Ok(new
+        //         {
+        //             result = user,
+        //             token = tokenHandler.WriteToken(token),
+        //             expiration = token.ValidTo,
+        //             message = "Login Successful"
+        //         });
+
+        //     }
+        //     else
+        //     {
+
+        //         ModelState.AddModelError("", "Username/Password was not found");
+
+        //         // Return Unauthorized Status If Unable To Login
+        //         return Unauthorized(new
+        //         {
+        //             LoginError = "Please Check the Login Creddentials - Invalid Username/Password was entered"
+        //         });
+        //     }
+        // }
+
+         [HttpPost("[action]")]
+        public async Task<IActionResult> Login([FromForm] AuthenticationLoginVM user)
         {
-
-            // Get The User
-            var user = await _userManager.FindByNameAsync(formdata.Username);
-
-            // Get The User Role
-            //var roles = await _userManager.GetRolesAsync(user);
-
-            // Generate Key Token
-            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtSettings.Secret));
-
-            // Generate Expiration Time For Token
-            double tokenExpiryTime = Convert.ToDouble(_jwtSettings.ExpireTime);
-
-            if (user != null && await _userManager.CheckPasswordAsync(user, formdata.Password))
+            if (!await _authManager.ValidateUser(user))
             {
-                if (user.AccountApproved == false) return Unauthorized(new { message = "Your account is pending approval"});
-                if (user.AccountEnabled == false) return Unauthorized(new { message = "Your account has been disabled" });
-
-                // Create JWT Token Handler
-                var tokenHandler = new JwtSecurityTokenHandler();
-
-                // Create Token Descriptor
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(new Claim[]
-                    {
-                        new Claim(JwtRegisteredClaimNames.Sub, formdata.Username),
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                        //new Claim(ClaimTypes.Role, roles.FirstOrDefault()),
-                        new Claim("LoggedOn", DateTime.Now.ToString())
-                    }),
-
-                    SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature),
-                    Issuer = _jwtSettings.Issuer,
-                    Audience = _jwtSettings.Audience,
-                    Expires = DateTime.UtcNow.AddMinutes(tokenExpiryTime)
-                };
-
-                // Create Token
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-
-                // Return OK Request
-                return Ok(new
-                {
-                    result = user,
-                    token = tokenHandler.WriteToken(token),
-                    expiration = token.ValidTo,
-                    message = "Login Successful"
-                });
-
+                return Unauthorized();
             }
-            else
+
+            return Ok(new
             {
-
-                ModelState.AddModelError("", "Username/Password was not found");
-
-                // Return Unauthorized Status If Unable To Login
-                return Unauthorized(new
-                {
-                    LoginError = "Please Check the Login Creddentials - Invalid Username/Password was entered"
-                });
-            }
+                result = user,
+                token = await _authManager.CreateToken(),
+                message = "Login Successful"
+            });
         }
     
     }

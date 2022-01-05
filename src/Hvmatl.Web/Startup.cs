@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Hvmatl.Web.Extensions;
 using Serilog;
+using Hvmatl.Web.Interface;
+using Hvmatl.Web.Utility;
 
 namespace Hvmatl.Web
 {
@@ -30,11 +32,12 @@ namespace Hvmatl.Web
             services.ConfigureIdentity();
             services.ConfigureDatabase(Configuration.GetConnectionString("DBConnectionString"));
             services.ConfigureJWT(Configuration.GetSection("JwtSettings"));
-            services.ConfigureAuthorization();
             services.ConfigureCors();
             services.ConfigureLogger();
             services.ConfigureMailService(Configuration.GetSection("EmailSettings"));
             services.ConfigureAutoMapper();
+            services.ConfigureFtpService(Configuration.GetSection("FtpSettings"));
+            services.AddScoped<IAuthenticationManager, AuthenticationManager>();
 
             // In production, the React files will be served from this directory
 
@@ -62,6 +65,9 @@ namespace Hvmatl.Web
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -55,6 +55,15 @@ namespace Hvmatl.Web.Extensions
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireLoggedIn", policy => policy.RequireRole("Admin", "User").RequireAuthenticatedUser());
+                options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("Admin").RequireAuthenticatedUser());
+            });
+
+            services.AddAuthentication();
+            
         }
 
         public static void ConfigureJWT(this IServiceCollection services, IConfigurationSection jwtConfiguration)
@@ -74,27 +83,21 @@ namespace Hvmatl.Web.Extensions
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-
+                    //Validate Issuer is the actual server that created the token
                     ValidateIssuer = true,
+                    //Validate the receiver of the token is a valid recipient
                     ValidateAudience = true,
+                    //Validate the token has not expired
                     ValidateLifetime = true,
+                    //Validate the signing key is valid and is trusted by the server
                     ValidateIssuerSigningKey = true,
-
+                
                     ValidIssuer = jwtConfiguration.GetSection("Issuer").Value,
                     ValidAudience = jwtConfiguration.GetSection("Audience").Value,
                     IssuerSigningKey = new SymmetricSecurityKey(
                         Encoding.UTF8.GetBytes(jwtConfiguration.GetSection("Secret").Value)
                     )
                 };
-            });
-        }
-
-        public static void ConfigureAuthorization(this IServiceCollection services)
-        {
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("RequireLoggedIn", policy => policy.RequireRole("Admin", "User").RequireAuthenticatedUser());
-                options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("Admin").RequireAuthenticatedUser());
             });
         }
 
@@ -126,6 +129,12 @@ namespace Hvmatl.Web.Extensions
                 .Where(x => x.FullName?
                     .Contains("Hvmatl.Web") ?? false)
                 );
+        }
+
+        public static void ConfigureFtpService(this IServiceCollection services, IConfiguration ftpConfiguration) 
+        {
+            services.Configure<FtpSettings>(ftpConfiguration);
+            services.AddTransient<IFtpService, FtpService>();
         }
     }
 }
