@@ -357,6 +357,143 @@ a.nav-brand > img {
   max-height: 80px;
 }
 
+
+/* Control Panel Change */
+.controlPanelContainer {
+  margin: 40px 0px;
+}
+
+.controlPanelBody {
+  margin-top: -1px;
+}
+
+.controlPanelContent {
+  border: 1px solid #dee2e6;
+  padding: 20px;
+  width: 100%;
+  min-height: 150px;
+  position: relative;
+}
+
+.spinner-border {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+}
+
+li.controlPanelNavigationItem {
+  z-index: 1;
+}
+
+.controlAccountList {
+  width: 100%
+}
+
+.controlAccountOption {
+  margin-bottom: 20px;
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.optionNewAccount {
+  outline: none;
+  border: none;
+  color: #ffff;
+  font-weight: bold;
+  background-color: #2182C9;
+  padding: 5px 10px;
+}
+
+.optionSearchAccount {
+  margin-left: 20px;
+  padding: 0px 10px;
+}
+
+.controlAccountItem {
+  display: flex; 
+  margin-bottom: 20px;
+  height: 140px;
+  margin-left: 20px;
+  position: relative;
+  border: 1px solid #D5D5D5;
+}
+
+.accountInfoTab {
+  position: absolute;
+  height: 130px;
+  top: 5px;
+  left: -30px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.accountInfoTab div, .accountInfoTab button {
+  border: 1px solid #D5D5D5;
+  height: calc(50% - 10px);
+  width: 30px;
+  margin: 5px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+}
+
+.accountID {
+  width: 10%;
+  padding: 60px 0px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  border-right: 1px solid #D5d5d5;
+}
+
+.accountInfo {
+  width: 90%;
+}
+
+.accountInfoHeader {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #d5d5d5;
+  width: 100%;
+}
+
+.accountTagsList {
+  margin-left: 20px;
+}
+
+.accountTagsItem {
+  border: 1px solid #E3E3E3;
+  padding: 5px 10px 5px 30px;
+  font-size: 11px;
+}
+
+.accountOption {
+  height: 90px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.accountOption button {
+  width: calc(33.33% - 10px);
+  height: 42px;
+  margin: 0px 5px;
+  outline: none;
+  border: none;
+  color: #ffff;
+  font-weight: bold;
+  background-color: #2182C9;
+}
+
+.controlPanelContent .modal {
+  top:0%;
+}
+
 /* :: 4.0 Header Area CSS */
 .header-area {
   position: relative;
@@ -364,19 +501,50 @@ a.nav-brand > img {
   z-index: 100; }
   .header-area .top-header {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     background-color: #f3f3f3;
     width: 100%; }
     .header-area .top-header .top-header-content {
       position: relative;
       z-index: 1;
       height: 50px; }
+      .header-area .top-header .top-header-content .dropdown{
+        display: inline-block;
+      }
+      .header-area .top-header .top-header-content .dropdown button{
+        padding: 0px;
+        box-shadow: none;
+      }
+      .header-area .top-header .top-header-content .dropdown .dropdown-menu{
+        width: 150px;
+        left: -45px;
+        min-width: unset;
+        padding: 0.5rem 0.5rem;
+      }
+      .header-area .top-header .top-header-content .dropdown .dropdown-menu.active{
+        display: block;
+      }
+      .header-area .top-header .top-header-content .dropdown .dropdown-menu a{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0px;
+      }
+      .header-area .top-header .top-header-content .dropdown .dropdown-menu a svg {
+        margin-left: 0px !important;
+      }
       .header-area .top-header .top-header-content .open,
       .header-area .top-header .top-header-content .email-address,
       .header-area .top-header .top-header-content .editor,
+      .header-area .top-header .top-header-content .sign-in,
+      .header-area .top-header .top-header-content .dropdown-item,
+      .header-area .top-header .top-header-content .profile,
+      .header-area .top-header .top-header-content .dropdown .dropdown-menu a,
       .header-area .top-header .top-header-content .phone {
         font-size: 14px;
-        color: #959595; }
+        color: #959595; 
+        background-color: transparent;
+        border: none;}
         @media only screen and (min-width: 768px) and (max-width: 991px) {
           .header-area .top-header .top-header-content .open,
           .header-area .top-header .top-header-content .email-address,
@@ -387,6 +555,9 @@ a.nav-brand > img {
           .header-area .top-header .top-header-content .open span,
           .header-area .top-header .top-header-content .email-address span,
           .header-area .top-header .top-header-content .editor span,
+          .header-area .top-header .top-header-content .sign-in span,
+          .header-area .top-header .top-header-content .dropdown-item span,
+          .header-area .top-header .top-header-content .profile button,
           .header-area .top-header .top-header-content .phone span{
             display: none; } 
             .header-area .top-header .top-header-content .temperature+span,
@@ -397,6 +568,10 @@ a.nav-brand > img {
         .header-area .top-header .top-header-content .email-address svg,
         .header-area .top-header .top-header-content .editor svg,
         .header-area .top-header .top-header-content .phone svg,
+        .header-area .top-header .top-header-content .sign-in svg,
+        .header-area .top-header .top-header-content .dropdown-item svg,
+        .header-area .top-header .top-header-content .profile svg,
+        .header-area .top-header .top-header-content .dropdown .dropdown-menu a svg,
         .header-area .top-header .top-header-content svg.temperature,
         .header-area .top-header .top-header-content svg.time {
           color: #c92f2f;
@@ -405,8 +580,11 @@ a.nav-brand > img {
         .header-area .top-header .top-header-content .open:hover,
         .header-area .top-header .top-header-content .email-address:hover,
         .header-area .top-header .top-header-content .editor:hover,
+        .header-area .top-header .top-header-content .sign-in:hover,
+        .header-area .top-header .top-header-content .dropdown-item:hover,
+        .header-area .top-header .top-header-content .profile:hover,
         .header-area .top-header .top-header-content .phone:hover {
-          color: #c92f2f; }
+          color: #c92f2f !important; }
       .header-area .top-header .top-header-content .email-address {
         margin-right: 0px; }
         @media only screen and (min-width: 768px) and (max-width: 991px) {

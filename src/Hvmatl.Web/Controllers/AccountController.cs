@@ -335,7 +335,7 @@ namespace Hvmatl.Web.Controllers
             });
         }
 
-        [HttpGet("[action]"), Authorize]
+        [HttpGet("[action]")]
         public IActionResult GetUserList()
         {
             // Query All User Into A List
@@ -349,5 +349,18 @@ namespace Hvmatl.Web.Controllers
             });
         }
 
+        [HttpDelete("[action]/{accountID}")]
+        public IActionResult Delete([FromRoute] int accountID){
+            var user = _dbContext.Users.Find(accountID);
+            if (user == null) return NotFound(new { message = "User not found"});
+
+            _dbContext.Remove(user);
+            _dbContext.SaveChanges();
+
+            return Ok(new
+            {
+                message = "User Deleted"
+            });
+        }
     }
 }

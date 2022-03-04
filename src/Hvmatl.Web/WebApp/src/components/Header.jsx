@@ -20,13 +20,28 @@ const Header = (prop) => {
     const twitter = useRef(null);
     const youtube = useRef(null);
     const mainMenu = useRef(null);
+    const signIn = useRef(null);
+    const signOut = useRef(null);
+    const profile = useRef(null);
 
     const [show, setShow] = useState(false);
     const [content, setContent] = useState({});
 
-    const signOut = (event) => {
+    const logoff = (event) => {
+        sessionStorage.removeItem('username');
         sessionStorage.removeItem('token');
         window.location.reload(true);
+    };
+
+    const toggleProfile = (event) => {
+        console.log(profile.current)
+        if (profile.current.classList.contains("active")) {
+            profile.current.classList.remove("active");
+        } 
+        else {
+            profile.current.classList.add("active");
+        }
+            
     };
 
     //Modify styling when the window size is changing
@@ -97,6 +112,7 @@ const Header = (prop) => {
         }
     };
 
+    
     //Add event handler after the element is rendered
     useEffect(() => {
         //Call all the callbacks to setup initial value after the element is mounted
@@ -167,9 +183,38 @@ const Header = (prop) => {
                                     <a href="/massSchedule" className="email-address"><i className="fas fa-calendar-alt" aria-hidden="true" ref={massSchedule}></i><span>{t("header.top.massSchedule")}</span></a>
                                     <a href="mailto:info@hvmatl.org" className="email-address"><i className="fas fa-envelope" aria-hidden="true" ref={email}></i> <span>info@hvmatl.org</span></a>
                                     <a href="tel:770-921-0077" className="phone"><i className="fas fa-phone" aria-hidden="true" ref={phone}></i> <span>770-921-0077</span></a>
-                                    { sessionStorage.getItem('token') != null ? 
-                                    <button onClick={signOut}><span>{sessionStorage.getItem('username')}</span> Sign Out</button> :  
-                                    <a href="/login" className="ml-2"><span>Login</span></a> 
+                                    { 
+                                        sessionStorage.getItem('token') != null ? 
+                                        <div className="dropdown">
+                                            <button className="btn btn-secondary dropdown-toggle profile" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onClick={toggleProfile}>
+                                                <i className="fas fa-user" aria-hidden="true"></i>
+                                                {sessionStorage.getItem('username')}
+                                            </button>
+                                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton" ref={profile}>
+                                                <a className="dropdown-item settings" href="#">
+                                                    <i className="fas fa-cog" aria-hidden="true"></i>
+                                                    Settings
+                                                </a>
+                                                <a className="dropdown-item control-panel" href="/controlPanel">
+                                                    <i className="fas fa-desktop" aria-hidden="true"></i>
+                                                    Control Panel
+                                                </a>
+                                                <a className="dropdown-item sign-out" onClick={logoff} href="#">
+                                                    <i className="fas fa-sign-out-alt" aria-hidden="true"></i>
+                                                    Sign Out
+                                                </a>
+                                            </div>
+                                        </div> 
+                                        :
+                                        // <button onClick={logoff} className='sign-out'>
+                                        //     
+                                        //     <span>{sessionStorage.getItem('username')}</span> 
+                                        //     Sign Out
+                                        // </button> :  
+                                        <a href="/login" className="sign-in">
+                                            <i className="fas fa-sign-in-alt" aria-hidden="true"></i>
+                                            <span>Login</span>
+                                        </a> 
                                     }
                                 </div>
                             </div>

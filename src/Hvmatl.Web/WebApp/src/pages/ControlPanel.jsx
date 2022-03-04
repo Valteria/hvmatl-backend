@@ -2,72 +2,62 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import ControlAccount from '../components/ControlAccount';
+import ControlHome from '../components/ControlHome';
+import { withTranslation } from 'react-multi-lang';
+import ControlArticle from '../components/ControlArticle';
 
 const ControlPanel = () => {
-    const [data, setData] = useState({ result: [] });
-
-    useEffect(() => {
-        const fetchData = async () => {
-          const result = await axios(
-            '/api/account/GetUserList',
-          );
-            console.log(result.data);
-          setData(result.data);
-        };
-
-        fetchData();
-    }, []);
-
+    const [showView, setShowView] = useState("showControlHome");
+    
+    
     return (
         <>
             <Header/>
             <div className="controlPanelContainer">
-
                 <div className="controlPanelHeader">
-                    <div className="headerId">
-                        ID
-                    </div>
-                    <div className="headerUsername">
-                        UserName
-                    </div>
-                    <div className="headerEmail">
-                        Email
-                    </div>
-                    <div className="headerOption">
-                        Option
+                    <div className="container">
+                        <div className="row">
+                            <ul className="controlPanelNavigationList nav nav-tabs">
+                                <li className="controlPanelNavigationItem nav-item">
+                                    <a
+                                        className={'nav-link ' + (showView == "showControlHome" ? "active": "")}
+                                        onClick={() => setShowView("showControlHome")}>Home</a>
+                                </li>
+                                <li className="controlPanelNavigationItem nav-item">
+                                    <a  
+                                        className={'nav-link ' + (showView == "showControlAccount" ? "active": "")} 
+                                        onClick={() => setShowView("showControlAccount")}>Account</a>
+                                </li>
+                                <li className="controlPanelNavigationItem nav-item">
+                                    <a  
+                                        className={'nav-link ' + (showView == "showControlArticle" ? "active": "")} 
+                                        onClick={() => setShowView("showControlArticle")}>Article</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-                <ul className="controlPanelRow">
-
-                {data.result.map(user => (
-                    <li key={user.id}> 
-                        <div className="rowId">
-                            {user.id}
+                <div className="controlPanelBody">
+                    <div className="container">
+                        <div className="row">
+                            <div className="controlPanelContent">
+                                {
+                                    showView == "showControlHome" &&
+                                    <ControlHome></ControlHome>
+                                }
+                                {
+                                    showView == "showControlAccount" &&
+                                    <ControlAccount></ControlAccount>
+                                }
+                                {
+                                    showView == "showControlArticle" &&
+                                    <ControlArticle></ControlArticle>
+                                }
+                            </div>
                         </div>
-                        <div className="rowUsername">
-                            {user.userName}
-                        </div>
-                        <div className="rowEmail">
-                            {user.email}
-                        </div>
-                        <div className="rowOption">
-                            {
-                                user.accountEnabled === true &&
-                                <div className="btn">Disable</div>
-                            }
-                            {
-                                user.accountEnabled === true &&
-                                <div className="btn">Enable</div>
-                            }
-                            {
-                                user.accountApproved === false &&
-                                <div className="btn">Approve</div>
-                            }
-                            <div className="btn">Delete</div>
-                        </div>
-                    </li>
-                ))}
-                </ul>
+                    </div>
+                </div>
             </div>
             <Footer/>
         </>

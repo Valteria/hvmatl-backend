@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from "axios";
 import Spinner from '../components/Spinner';
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const Login = () => {
     const [isLoading, setLoading] = useState(false);
@@ -17,8 +19,7 @@ const Login = () => {
 
         axios.post('/api/authentication/login', formData)
         .then(result => {
-            console.log(result);
-            sessionStorage.setItem('username', result.data.result.userName);
+            sessionStorage.setItem('username', result.data.result.username);
             sessionStorage.setItem('token', result.data.token);
             window.location.href = '/';
 
@@ -32,6 +33,7 @@ const Login = () => {
 
     return (
         <>
+            <Header />
             <div className="container my-5">
                 <div className="row justify-content-center">
                     <div className="col-md-8 mb-4">
@@ -75,6 +77,7 @@ const Login = () => {
                     </div>
                 </div>
             </div>
+            <Footer />
         </>
     );
 }

@@ -175,3 +175,60 @@ export const getRepoList = async (dispatch, cateId, headId) => {
     }
 
 }
+
+//Account Dispatch
+
+// export const createAccount = async (dispatch, accountData) => {
+//     dispatch({ type: actionType.CREATE_ACCOUNT_PENDING })
+//     try {
+//         const { data } = await axios.get('/api/account/create')
+//         dispatch({ type: actionType.CREATE_ACCOUNT_SUCCESS, payload: data })
+//     } catch (error) {
+//         const message = error.response && error.response.data.message
+//             ? error.response.data.message
+//             : error.message
+//         dispatch({ type: actionType.CREATE_ACCOUNT_FAILED, payload: message })
+//     }
+// }
+
+export const getAccount = async (dispatch) => {
+    dispatch({ type: actionType.READ_ACCOUNT_PENDING })
+    try {
+        const { data } = await axios.get('/api/account/getuserlist')
+        dispatch({ type: actionType.READ_ACCOUNT_SUCCESS, payload: data })
+    } catch (error) {
+        const message = error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        dispatch({ type: actionType.READ_ACCOUNT_FAILED, payload: message })
+    }
+
+}
+
+export const updateAccount = async (dispatch, accountData) => {
+    dispatch({ type: actionType.UPDATE_ACCOUNT_PENDING })
+    try {
+        const { data } = await axios.get('/api/account/update')
+        dispatch({ type: actionType.UPDATE_ACCOUNT_SUCCESS, payload: data })
+    } catch (error) {
+        const message = error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        dispatch({ type: actionType.UPDATE_ACCOUNT_FAILED, payload: message })
+    }
+
+}
+
+export const deleteAccount = async (dispatch, accountData) => {
+    dispatch({ type: actionType.DELETE_ACCOUNT_PENDING })
+    try {
+        const { data } = await axios.get('/api/account/delete')
+        dispatch({ type: actionType.DELETE_ACCOUNT_SUCCESS, payload: data })
+    } catch (error) {
+        const message = error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        dispatch({ type: actionType.DELETE_ACCOUNT_FAILED, payload: message })
+    }
+
+}
